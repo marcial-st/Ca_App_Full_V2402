@@ -1,0 +1,38 @@
+  General model Exp1:
+     val(x) = a*exp(b*x)
+     Coefficients (with 95% confidence bounds):
+       a =      0.2158  (0.1064, 0.3252)
+       b =   -0.009375  (-0.01851, -0.0002376)
+
+        case 'exp1'
+            prof_fit = coeffs(1)*exp(coeffs(2)*t);
+
+EXP1
+coeffs_m =
+
+    0.3099   -0.0166   => tau = 60.24
+
+EXP2
+coeffs_m =
+
+    0.5670   -0.0478   => tau = 20.92
+
+EXP3
+coeffs_m =
+
+    0.5849   -0.0608   => tau = 16.44
+
+EXP4
+coeffs_m =
+
+    0.7143   -0.0259   => tau = 38.61
+
+EXP5
+coeffs_m =
+
+    0.4798   -0.0411   => tau = 24.33
+
+EXP6
+coeffs_m =
+
+    0.3843   -0.0396   => tau = 25.25

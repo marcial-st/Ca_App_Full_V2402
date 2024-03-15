@@ -1,0 +1,120 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="688176694" file="C:\Ca_App_V2\Ca_App_171008.prj" location="C:\Ca_App_V2" name="Ca_App_171008" target="target.mlapps" target-name="Package App">
+    <param.appname>Ca_App_171008</param.appname>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.icon />
+    <param.icons />
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.version>2.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>C:\Ca_App_V2</param.output>
+    <param.guid>78aab30a-3c31-4d96-b7ed-0d4800a129f4</param.guid>
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.icon />
+      <param.icons />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\Ca_App_V2.m</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}\averagefilter.m</file>
+      <file>${PROJECT_ROOT}\bin_and_clean.m</file>
+      <file>${PROJECT_ROOT}\bin_sequence.m</file>
+      <file>${PROJECT_ROOT}\BinSettings.fig</file>
+      <file>${PROJECT_ROOT}\BinSettings.m</file>
+      <file>${PROJECT_ROOT}\Ca_App_V2.fig</file>
+      <file>${PROJECT_ROOT}\cell_text.m</file>
+      <file>${PROJECT_ROOT}\get_images.m</file>
+      <file>${PROJECT_ROOT}\img_subset.m</file>
+      <file>${PROJECT_ROOT}\int_tl.m</file>
+      <file>${PROJECT_ROOT}\k_eval.m</file>
+      <file>${PROJECT_ROOT}\kalman_v1.m</file>
+      <file>${PROJECT_ROOT}\logo_new.jpg</file>
+      <file>${PROJECT_ROOT}\save_data.m</file>
+      <file>${PROJECT_ROOT}\sel_auto.m</file>
+      <file>${PROJECT_ROOT}\sel_auto_all.m</file>
+      <file>${PROJECT_ROOT}\sel_manual.m</file>
+      <file>${PROJECT_ROOT}\store_data.m</file>
+      <file>${PROJECT_ROOT}\xlwrite.m</file>
+    </fileset.depfun>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}\Action Undo.png</file>
+      <file>${PROJECT_ROOT}\b_down.jpg</file>
+      <file>${PROJECT_ROOT}\b_up.jpg</file>
+      <file>${PROJECT_ROOT}\favicon.ico</file>
+      <file>${PROJECT_ROOT}\hand-ol-16.png</file>
+      <file>${PROJECT_ROOT}\help.png</file>
+      <file>${PROJECT_ROOT}\poi_library</file>
+      <file>${PROJECT_ROOT}\roiIcon.png</file>
+      <file>${PROJECT_ROOT}\star_icon3.png</file>
+      <file>${PROJECT_ROOT}\target-icon-56065.png</file>
+    </fileset.resources>
+    <fileset.package />
+    <build-deliverables>
+      <file location="C:\" name="Ca_App_V2" optional="false">C:\Ca_App_V2</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2017a</root>
+      <toolboxes>
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabcoder" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="embeddedcoder" />
+      </toolboxes>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.1</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

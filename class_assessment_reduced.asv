@@ -1,0 +1,148 @@
+clear all;clc;close all;
+
+%% clean report path
+% spath = "C:\Users\MST\Google Drive\INAOE Admisión - Marcial\Research\ReportGen";
+spath = "C:\Users\MST\Documents\ReportGen"
+cleanSpath(spath)
+%% Main 
+cindex = [0,1,2,3,4];
+clabels = ["unknown"; %0
+    "no response"; %1
+    "basal"; %2
+    "response"; %3
+    "basal+response";%4
+    ];
+
+clabels = lower(clabels);
+cdict = containers.Map(cindex,clabels);
+%--------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
+main_path = "C:\Users\MST\OneDrive\Perfiles\PeakGT";
+gta = ["100526_5_Roberto.xlsx",...
+    "100528_1_Roberto.xlsx",...
+    "100528_4_Roberto.xlsx",...
+    "100528_5_Roberto.xlsx",...
+    "100528_6_Roberto.xlsx",...
+    "100528_8_Roberto.xlsx",...
+    "100601_1_Roberto.xlsx",...
+    "100604_1_Roberto.xlsx",...
+    "100604_9_Roberto.xlsx"];
+   
+ata = ["ds_100526_5_r.mat",...
+    "ds_100528_1_r.mat",...
+    "ds_100528_4_r.mat",...
+    "ds_100528_5_r.mat",...
+    "ds_100528_6_r.mat",...
+    "ds_100528_8_r.mat",...
+    "ds_100601_1_r.mat",...
+    "ds_100604_4_r.mat",...    
+    "ds_100604_9_r.mat"];
+
+gt_path = "C:\Users\MST\Google Drive\INAOE Admisión - Marcial\Research\Peak_Analysis_Ground_Truth";
+gt_peaks = ["data_100526_5_Roberto.mat",...
+    "data_100528_1_Roberto.mat",...
+    "data_100528_4_Roberto.mat",...
+    "data_100528_5_Roberto.mat",...
+    "data_100528_6_Roberto.mat",...
+    "data_100528_8_Roberto.mat",...
+    "data_100601_1_Roberto.mat",...
+    "data_100604_1_Roberto.mat",...
+    "data_100604_9_Roberto.mat"];
+
+%--------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
+i=2;
+
+exp_name = regexprep(gta(i), '_Roberto.xlsx', '','ignorecase');
+gts = readtable(fullfile(main_path,gta(i)));
+gts = gts{:,2};
+ats = load(fullfile(main_path,ata(i)));
+at_cvector = ats.pclass;
+load(fullfile(gt_path,gt_peaks(i)));
+
+% Clean up 
+for ii=1:1:length(gts)
+    gts{ii} = regexprep(gts{ii}, 'unestable', 'Unknown','ignorecase');
+    gts{ii} = regexprep(gts{ii}, 'non', 'no','ignorecase');
+    gts{ii} = regexprep(gts{ii}, '\(.*?\)', '','ignorecase');    
+    gts{ii} = regexprep(gts{ii}, ';', '+','ignorecase');
+    gts{ii} = regexprep(gts{ii}, ':', '+','ignorecase');
+    gts{ii} = regexprep(gts{ii}, 'oscillation[^s]','oscillations','ignorecase');
+    gts{ii} = regexprep(gts{ii}, 'basal.+?no response','basal','ignorecase');
+    gts{ii} = regexprep(gts{ii}, '\s*\+\s*', '+','ignorecase');
+end
+gts = lower(gts);
+
+for ii=1:1:length(gts)    
+    gts{ii} = regexprep(gts{ii},'basal activity\+.+','basal+response');
+    gts{ii} = regexprep(gts{ii},'peak.*','response');
+    gts{ii} = regexprep(gts{ii},'oscillat.*','response');    
+end
+
+gt_cvector = zeros(length(gts),1);
+for ii=1:1:length(gts)
+    gt_cvector(ii) = find(clabels==gts{ii})-1;
+end
+
+cvector_u = unique([gt_cvector;at_cvector]);
+for k=1:1:length(cvector_u)
+    order_conf(k) = values(cdict,{cvector_u(k)});    
+end 
+
+gt_v = categorical(gt_cvector,cindex,clabels);
+at_v = categorical(at_cvector,cindex,clabels);
+
+C = confusionchart(gt_v,at_v);
+C.ColumnSummary = 'column-normalized';
+C.RowSummary = 'row-normalized';
+ctit = regexprep(gta(i), '_','\\_','ignorecase');
+C.Title = ctit;
+
+hand_confusion = gca;
+saveas(hand_confusion,fullfile(spath,"A_Confusion.png"));   
+
+%% ROC
+at_oh = onehotenc(cvector_u,at_cvector);
+gt_oh = onehotenc(cvector_u,gt_cvector);
+figure;
+plotroc(gt_oh,at_oh)
+hand_roc = gca;
+saveas(hand_roc,fullfile(spath,"A_Roc.png")); 
+
+
+%% Differences
+[difv] = vecdiff(at_cvector,gt_cvector);
+figure;
+hand_dif = gca;
+
+disp(strcat("Looking for differences ..."));
+disp(strcat("     ... 0 %"));
+t = (0:1:length([ats.cells_online(1).ca_profile])-1).*3;
+for k=1:1:length(difv)
+    idx = difv(k);
+%     plot(t,ats.cells_online(idx).ca_profile,'LineWidth',1.5)
+    plot(t,profiles(idx).ca_profile,'LineWidth',1.5)
+    ptitle=strcat("Profile ",num2str(idx),"  GT=",cdict(gt_cvector(idx)),"   Sys=",cdict(at_cvector(idx)));
+    title(ptitle)
+    xlabel('Time [s]')
+    ylabel('Ratio')
+    ylim([min([ats.cells_online.ca_profile]) max([ats.cells_online.ca_profile])])
+    xlim([t(1) t(end)])
+    
+    spk = [spks(idx).pks];
+    if ~isempty(spk)
+        hold on
+        plot(spk(:,1),spk(:,2),'or','MarkerSize',6)
+        hold off
+    end
+    
+    figname = strcat("B_diff",num2str(k,'%03d'),".png");
+    saveas(hand_dif,fullfile(spath,figname));
+    disp(strcat("     ... ",num2str(round(k*100/length(difv)))," %"));
+end
+disp(strcat("Diffs Finished (:"));
+
+
+
+%% Report generation
+genReport(spath,exp_name)
